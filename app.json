@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "tinnitus-mobile-app",
+    "slug": "tinnitus-mobile-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
