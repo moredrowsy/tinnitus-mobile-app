@@ -42,6 +42,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected String getJSMainModuleName() {
       return "index";
     }
+    
+    // For using React Native Reaniamted 2
+    // @see https://docs.swmansion.com/react-native-reanimated/docs/fundamentals/installation/
+    @Override
+    protected JSIModulePackage getJSIModulePackage() {
+      return new ReanimatedJSIModulePackage(); // <- add
+    }
   });
 
   @Override
