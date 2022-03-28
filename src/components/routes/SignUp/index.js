@@ -1,14 +1,20 @@
-import { Text, View } from 'react-native';
-import React, { Component } from 'react';
+import React from 'react';
 
-export class SignUp extends Component {
-  render() {
-    return (
-      <View>
-        <Text>SignUp</Text>
-      </View>
-    );
-  }
+// React Native
+import { SafeAreaView, Text, View } from 'react-native';
+import { NAVBAR } from '../../../constants/tailwindcss';
+import FocusAwareStatusBar from '../../FocusAwareStatusBar';
+
+function SignUp() {
+  return (
+    <SafeAreaView>
+      <FocusAwareStatusBar
+        barStyle='light-content'
+        backgroundColor={NAVBAR.backgroundColor}
+      />
+      <Text>SignUp</Text>
+    </SafeAreaView>
+  );
 }
 
 export default SignUp;

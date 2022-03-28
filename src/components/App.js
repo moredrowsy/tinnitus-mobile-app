@@ -102,6 +102,7 @@ const drawerItems = [
 
 // Ignore setTimeout duration warnings
 import { LogBox } from 'react-native';
+import { NAVBAR } from '../constants/tailwindcss';
 LogBox.ignoreLogs(['Setting a timer']);
 
 // StatusBar
@@ -121,8 +122,6 @@ export default function App() {
   const dispatch = useDispatch();
   const mixes = useSelector(selectMixes);
   const usernames = useSelector(selectUsernames);
-
-  console.log({ usernames });
 
   // Fetch and update user information
   // Only fetch when user object is different
@@ -172,32 +171,30 @@ export default function App() {
         drawerType='front'
         initialRouteName='SignIn'
         screenOptions={{
-          activeTintColor: '#e91e63',
           itemStyle: { marginVertical: 10 },
-          drawerActiveBackgroundColor: '#111827',
-          drawerActiveTintColor: '#fff',
-          drawerInactiveBackgroundColor: '#1f2937',
-          drawerInactiveTintColor: '#d1d5db',
+          drawerActiveBackgroundColor: NAVBAR.activeBackgroundColor,
+          drawerActiveTintColor: NAVBAR.activeColor,
+          drawerInactiveBackgroundColor: NAVBAR.backgroundColor,
+          drawerInactiveTintColor: NAVBAR.color,
           drawerLabelStyle: {
-            fontWeight: '500',
-            fontFamily: 'sans-serif',
-            fontSize: 18,
+            fontWeight: NAVBAR.fontWeight,
+            fontFamily: NAVBAR.fontFamily,
+            fontSize: NAVBAR.fontSize,
           },
-          drawerStyle: { backgroundColor: '#1f2937' },
+          drawerStyle: { backgroundColor: NAVBAR.backgroundColor },
           drawerType: 'front',
           headerStyle: {
-            backgroundColor: '#1f2937',
+            backgroundColor: NAVBAR.backgroundColor,
           },
           headerTitleStyle: {
-            color: '#d1d5db',
-            fontFamily: 'sans-serif',
+            color: NAVBAR.color,
+            fontFamily: NAVBAR.fontFamily,
           },
-          headerTintColor: '#d1d5db',
+          headerTintColor: NAVBAR.color,
         }}
         backBehavior='history'
       >
         {drawerItems.map((drawerItem) => {
-          console.log({ drawerItem });
           return (
             <Drawer.Screen
               key={drawerItem.name}

@@ -1,14 +1,20 @@
-import { Text, View } from 'react-native';
-import React, { Component } from 'react';
+import React from 'react';
 
-export class MixPost extends Component {
-  render() {
-    return (
-      <View>
-        <Text>MixPost</Text>
-      </View>
-    );
-  }
+// React Native
+import { SafeAreaView, Text, View } from 'react-native';
+import { NAVBAR } from '../../../constants/tailwindcss';
+import FocusAwareStatusBar from '../../FocusAwareStatusBar';
+
+function MixPost() {
+  return (
+    <SafeAreaView>
+      <FocusAwareStatusBar
+        barStyle='light-content'
+        backgroundColor={NAVBAR.backgroundColor}
+      />
+      <Text>SignUp</Text>
+    </SafeAreaView>
+  );
 }
 
 export default MixPost;

@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 
 // React Native
 import {
+  SafeAreaView,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   Text,
   View,
 } from 'react-native';
+import { NAVBAR } from '../../../constants/tailwindcss';
+import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
 import EarLogo from '../../../assets/images/ear-logo.svg';
 
@@ -47,7 +50,11 @@ const SignIn = () => {
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center m-2`}>
+    <SafeAreaView style={tw`flex-1 justify-center items-center m-2`}>
+      <FocusAwareStatusBar
+        barStyle='light-content'
+        backgroundColor={NAVBAR.backgroundColor}
+      />
       <View style={tw`-mt-24`}>
         <EarLogo width={100} height={100} />
       </View>
@@ -80,7 +87,7 @@ const SignIn = () => {
       >
         <Text style={tw`text-center text-white`}>Sign In</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
