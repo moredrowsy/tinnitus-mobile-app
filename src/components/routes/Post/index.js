@@ -12,7 +12,7 @@ function Post() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>Post</Text>
     </SafeAreaView>
   );
 }

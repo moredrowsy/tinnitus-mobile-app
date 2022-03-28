@@ -16,21 +16,19 @@ import EarLogo from '../../../assets/images/ear-logo.svg';
 
 // Firebase
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { signOut } from 'firebase/auth';
 import { auth } from '../../../store/firebase';
 
-const SignIn = () => {
+const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errMsg, setErrMsg] = useState(null);
 
   const signIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, 'thuantang@gmail.com', '123456');
+      await signInWithEmailAndPassword(auth, email, password);
       setErrMsg(null);
 
-      // TODO
-      //   navigate("/");
+      navigation.navigate('Dashboard');
     } catch (err) {
       const errCode = err.code;
 
@@ -42,11 +40,6 @@ const SignIn = () => {
         setErrMsg('Something went wrong');
       }
     }
-  };
-
-  const logOut = () => {
-    signOut(auth);
-    console.log('logging out');
   };
 
   return (
@@ -70,6 +63,8 @@ const SignIn = () => {
           style={tw`px-3 py-2`}
           keyboardType='email-address'
           placeholder='Email address'
+          value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View
@@ -80,10 +75,13 @@ const SignIn = () => {
           keyboardType='default'
           secureTextEntry={true}
           placeholder='Passowrd'
+          value={password}
+          onChangeText={setPassword}
         />
       </View>
       <TouchableOpacity
         style={tw`mt-5 w-full py-2 px-4 text-sm font-medium rounded-md bg-indigo-600`}
+        onPress={signIn}
       >
         <Text style={tw`text-center text-white`}>Sign In</Text>
       </TouchableOpacity>

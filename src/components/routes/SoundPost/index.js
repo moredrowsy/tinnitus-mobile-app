@@ -12,7 +12,7 @@ function SoundPost() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>SoundPost</Text>
     </SafeAreaView>
   );
 }

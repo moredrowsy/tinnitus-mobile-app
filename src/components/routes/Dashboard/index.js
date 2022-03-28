@@ -12,7 +12,7 @@ function Dashboard() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>Dashboard</Text>
     </SafeAreaView>
   );
 }

@@ -12,7 +12,7 @@ function Sounds() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>Sounds</Text>
     </SafeAreaView>
   );
 }

@@ -12,7 +12,7 @@ function Profile() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>Profile</Text>
     </SafeAreaView>
   );
 }

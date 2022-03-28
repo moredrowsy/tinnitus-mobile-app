@@ -14,6 +14,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import tw from 'twrnc';
 import {
   Dashboard,
+  LogOut,
   Mixes,
   NoiseGenerator,
   SignIn,
@@ -65,38 +66,18 @@ const drawerItems = [
   {
     name: 'Dashboard',
     component: Dashboard,
-    iconType: 'Material',
-    iconName: 'face-profile',
   },
   {
     name: 'Noise',
     component: NoiseGenerator,
-    iconType: 'Feather',
-    iconName: 'settings',
   },
   {
     name: 'Sounds',
     component: Sounds,
-    iconType: 'Material',
-    iconName: 'bookmark-check-outline',
   },
   {
     name: 'Mixes',
     component: Mixes,
-    iconType: 'FontAwesome5',
-    iconName: 'user-friends',
-  },
-  {
-    name: 'Sign In',
-    component: SignIn,
-    iconType: 'FontAwesome5',
-    iconName: 'user-friends',
-  },
-  {
-    name: 'Sign Up',
-    component: SignUp,
-    iconType: 'FontAwesome5',
-    iconName: 'user-friends',
   },
 ];
 
@@ -203,6 +184,14 @@ export default function App() {
             />
           );
         })}
+        {user ? (
+          <Drawer.Screen key='LogOut' name='Log Out' component={LogOut} />
+        ) : (
+          <>
+            <Drawer.Screen key='SignIn' name='Sign In' component={SignIn} />
+            <Drawer.Screen key='SignUp' name='Sign Up' component={SignUp} />
+          </>
+        )}
       </Drawer.Navigator>
     </NavigationContainer>
 

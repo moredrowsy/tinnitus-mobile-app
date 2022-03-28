@@ -12,7 +12,7 @@ function MixPost() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>MixPost</Text>
     </SafeAreaView>
   );
 }

@@ -12,7 +12,7 @@ function NoiseGenerator() {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>SignUp</Text>
+      <Text>NoiseGenerator</Text>
     </SafeAreaView>
   );
 }
