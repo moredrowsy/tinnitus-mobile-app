@@ -88,6 +88,9 @@ project.ext.react = [
 
 apply from: new File(["node", "--print", "require.resolve('react-native/package.json')"].execute(null, rootDir).text.trim(), "../react.gradle")
 
+// React Native Vector Icons @see https://github.com/oblador/react-native-vector-icons#installation
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices

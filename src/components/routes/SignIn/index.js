@@ -12,16 +12,20 @@ import {
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
-import EarLogo from '../../../assets/images/ear-logo.svg';
+import { useKeyboardStatus } from '../../../hooks';
 
 // Firebase
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../store/firebase';
 
+import EarLogo from '../../../assets/images/ear-logo.svg';
+
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errMsg, setErrMsg] = useState(null);
+
+  const keyboardStatus = useKeyboardStatus();
 
   const signIn = async () => {
     try {
@@ -48,9 +52,11 @@ const SignIn = ({ navigation }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`-mt-24`}>
-        <EarLogo width={100} height={100} />
-      </View>
+      {!keyboardStatus && (
+        <View style={{ marginTop: -150 }}>
+          <EarLogo width={75} height={75} />
+        </View>
+      )}
       <View>
         <Text style={tw`mt-5 text-center text-3xl font-bold text-gray-900`}>
           Log into your account

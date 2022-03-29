@@ -5,7 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
-function Dashboard() {
+const Dashboard = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
@@ -15,6 +15,6 @@ function Dashboard() {
       <Text>Dashboard</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default Dashboard;

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import {
   collection,
   doc,
@@ -6,15 +6,15 @@ import {
   getDocs,
   setDoc,
   updateDoc,
-} from "firebase/firestore";
-import { db } from "../../firebase";
-import { debounce } from "../../../utils";
-import { DEBOUNCE_WAIT } from "../../../constants";
-import { addUsername } from "./usernames";
+} from 'firebase/firestore';
+import { db } from '../../firebase';
+import { debounce } from '../../../utils';
+import { DEBOUNCE_WAIT } from '../../../constants';
+import { addUsername } from './usernames';
 
-const sliceKey = "user";
+const sliceKey = 'user';
 const initialState = {
-  displayName: "",
+  displayName: '',
   sounds: {},
   mixes: {},
   noises: {},
@@ -42,22 +42,30 @@ export const usernamesSlice = createSlice({
     },
     updateUserSoundVote: (state, action) => {
       const { soundId, vote } = action.payload;
-      state.sounds[soundId].vote = vote;
+      if (state.sounds.hasOwnProperty(soundId)) {
+        state.sounds[soundId].vote = vote;
+      }
       return state;
     },
     updateUserSoundVolume: (state, action) => {
       const { soundId, volume } = action.payload;
-      state.sounds[soundId].volume = volume;
+      if (state.sounds.hasOwnProperty(soundId)) {
+        state.sounds[soundId].volume = volume;
+      }
       return state;
     },
     updateUserMixVote: (state, action) => {
       const { mixId, vote } = action.payload;
-      state.mixes[mixId].vote = vote;
+      if (state.mixes.hasOwnProperty(mixId)) {
+        state.mixes[mixId].vote = vote;
+      }
       return state;
     },
     updateUserMixVolume: (state, action) => {
       const { mixId, soundId, volume } = action.payload;
-      state.mixes[mixId].mixVolumes[soundId] = volume;
+      if (state.mixes.hasOwnProperty(mixId)) {
+        state.mixes[mixId].mixVolumes[soundId] = volume;
+      }
       return state;
     },
     updateUserNoiseVolume: (state, action) => {
@@ -137,7 +145,7 @@ export const updateUserDisplayNameAsync =
   ({ displayName, userId }, onSuccess, onError) =>
   async (dispatch, getState) => {
     try {
-      const userRef = doc(db, "users", userId);
+      const userRef = doc(db, 'users', userId);
       updateDoc(userRef, {
         displayName,
       });
@@ -156,7 +164,7 @@ export const updateUserMixesAsync =
   ({ userId, mixId, userMix }) =>
   async (dispatch, getState) => {
     try {
-      const postRef = doc(db, "users", userId, "mixes", mixId);
+      const postRef = doc(db, 'users', userId, 'mixes', mixId);
       setDoc(postRef, userMix);
       dispatch(updateUserMix({ userId, mixId, userMix }));
     } catch (err) {
@@ -168,7 +176,7 @@ export const updateUserSoundsAsync =
   ({ userId, soundId, userSound }) =>
   async (dispatch, getState) => {
     try {
-      const postRef = doc(db, "users", userId, "sounds", soundId);
+      const postRef = doc(db, 'users', userId, 'sounds', soundId);
       setDoc(postRef, userSound);
       dispatch(updateUserSound({ soundId, userSound }));
     } catch (err) {
@@ -181,7 +189,7 @@ export const updateUserSoundVoteAsync =
   async (dispatch, getState) => {
     try {
       if (userId) {
-        const postRef = doc(db, "users", userId, "sounds", soundId);
+        const postRef = doc(db, 'users', userId, 'sounds', soundId);
         updateDoc(postRef, { vote });
 
         dispatch(updateUserSoundVote({ soundId, vote }));
@@ -199,7 +207,7 @@ export const updateUserMixVoteAsync =
   async (dispatch, getState) => {
     try {
       if (userId) {
-        const postRef = doc(db, "users", userId, "mixes", mixId);
+        const postRef = doc(db, 'users', userId, 'mixes', mixId);
         updateDoc(postRef, { vote });
 
         dispatch(updateUserMixVote({ mixId, vote }));
@@ -215,9 +223,8 @@ export const updateUserMixVoteAsync =
 const updateSoundVolumeAsyncDebounce = debounce(
   ({ userId, soundId, volume, dispatch }) => {
     try {
-      const postRef = doc(db, "users", userId, "sounds", soundId);
+      const postRef = doc(db, 'users', userId, 'sounds', soundId);
       updateDoc(postRef, { volume });
-      dispatch(updateUserSoundVolume({ soundId, volume }));
     } catch (e) {
       console.log(e);
     }
@@ -244,9 +251,8 @@ const updateMixVolumeAsyncDebounce = debounce(
   ({ userId, mixId, soundId, mixVolumes, volume, dispatch }) => {
     try {
       mixVolumes[soundId] = volume;
-      const postRef = doc(db, "users", userId, "mixes", mixId);
+      const postRef = doc(db, 'users', userId, 'mixes', mixId);
       updateDoc(postRef, { mixVolumes });
-      dispatch(updateUserMixVolume({ mixId, soundId, volume }));
     } catch (e) {
       console.log(e);
     }
@@ -280,7 +286,7 @@ export const updateUserMixTrackVolumeAsync =
 const updateNoiseVolumeAsyncDebounce = debounce(
   ({ userId, color, volume, dispatch }) => {
     try {
-      const postRef = doc(db, "users", userId, "noises", color);
+      const postRef = doc(db, 'users', userId, 'noises', color);
       setDoc(postRef, { volume });
       dispatch(updateUserNoiseVolume({ color, volume }));
     } catch (e) {
@@ -309,12 +315,12 @@ export const fetchUserAsync =
   ({ userId }) =>
   async (dispatch, getState) => {
     try {
-      const userRef = doc(db, "users", userId);
+      const userRef = doc(db, 'users', userId);
       const userSnap = await getDoc(userRef);
       const data = userSnap.data();
       const { displayName } = data;
 
-      const soundsRef = collection(db, "users", userId, "sounds");
+      const soundsRef = collection(db, 'users', userId, 'sounds');
       const soundsSnapshot = await getDocs(soundsRef);
       const sounds = {};
       soundsSnapshot.forEach((q) => {
@@ -322,7 +328,7 @@ export const fetchUserAsync =
         sounds[q.id] = data;
       });
 
-      const mixesRef = collection(db, "users", userId, "mixes");
+      const mixesRef = collection(db, 'users', userId, 'mixes');
       const mixesSnapshot = await getDocs(mixesRef);
       const mixes = {};
       mixesSnapshot.forEach((q) => {
@@ -330,7 +336,7 @@ export const fetchUserAsync =
         mixes[q.id] = data;
       });
 
-      const noisesRef = collection(db, "users", userId, "noises");
+      const noisesRef = collection(db, 'users', userId, 'noises');
       const noisesSnapshot = await getDocs(noisesRef);
       const noises = {};
       noisesSnapshot.forEach((q) => {

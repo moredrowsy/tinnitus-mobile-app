@@ -9,7 +9,7 @@ import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../store/firebase';
 
-function LogOut() {
+const LogOut = () => {
   useEffect(() => {
     signOut(auth);
   });
@@ -23,6 +23,6 @@ function LogOut() {
       <Text>LogOut</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default LogOut;

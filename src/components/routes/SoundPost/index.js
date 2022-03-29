@@ -5,7 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
-function SoundPost() {
+const SoundPost = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
@@ -15,6 +15,6 @@ function SoundPost() {
       <Text>SoundPost</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default SoundPost;

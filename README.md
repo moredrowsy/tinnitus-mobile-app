@@ -34,3 +34,8 @@ React Native Navigation uses Reanimated 2 configuration added to android. Change
 ### React Native SVG changes
 
 `react-native-svg-transformer` modifies `metro.config.js`. See github for instructions
+
+### React Native Vector Icons changes
+
+`react-native-vector-icons` modifies `android/app/build.gradle` with `apply from`.
+See github repo for notes.

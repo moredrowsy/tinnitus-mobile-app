@@ -5,7 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
-function Profile() {
+const Profile = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
@@ -15,6 +15,6 @@ function Profile() {
       <Text>Profile</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default Profile;

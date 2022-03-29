@@ -5,7 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
-function NoiseGenerator() {
+const NoiseGenerator = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
@@ -15,6 +15,6 @@ function NoiseGenerator() {
       <Text>NoiseGenerator</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default NoiseGenerator;

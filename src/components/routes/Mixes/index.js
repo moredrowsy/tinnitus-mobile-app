@@ -5,7 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
-function Mixes() {
+const Mixes = () => {
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
@@ -15,6 +15,6 @@ function Mixes() {
       <Text>Mixes</Text>
     </SafeAreaView>
   );
-}
+};
 
 export default Mixes;

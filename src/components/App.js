@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { getHeaderTitle } from '@react-navigation/elements';
 import { NavigationContainer } from '@react-navigation/native';
 import tw from 'twrnc';
 import {
@@ -17,6 +18,7 @@ import {
   LogOut,
   Mixes,
   NoiseGenerator,
+  Profile,
   SignIn,
   SignUp,
   Sounds,
@@ -84,13 +86,14 @@ const drawerItems = [
 // Ignore setTimeout duration warnings
 import { LogBox } from 'react-native';
 import { NAVBAR } from '../constants/tailwindcss';
+import AuthedHeader from './navigation/DrawerHeader';
 LogBox.ignoreLogs(['Setting a timer']);
 
 // StatusBar
 const STATUS_BAR_STYLES = ['default', 'dark-content', 'light-content'];
 const STATUS_BAR_TRANSITIONS = ['fade', 'slide', 'none'];
 
-export default function App() {
+const App = () => {
   const [user, loading, error] = useAuthState(auth);
 
   if (error) {
@@ -152,11 +155,11 @@ export default function App() {
         drawerType='front'
         initialRouteName='SignIn'
         screenOptions={{
-          itemStyle: { marginVertical: 10 },
           drawerActiveBackgroundColor: NAVBAR.activeBackgroundColor,
           drawerActiveTintColor: NAVBAR.activeColor,
           drawerInactiveBackgroundColor: NAVBAR.backgroundColor,
           drawerInactiveTintColor: NAVBAR.color,
+          drawerItemStyle: { borderRadius: 6 },
           drawerLabelStyle: {
             fontWeight: NAVBAR.fontWeight,
             fontFamily: NAVBAR.fontFamily,
@@ -164,6 +167,19 @@ export default function App() {
           },
           drawerStyle: { backgroundColor: NAVBAR.backgroundColor },
           drawerType: 'front',
+          header: ({ navigation, route, options }) => {
+            const title = getHeaderTitle(options, route.name);
+
+            return (
+              <AuthedHeader
+                navigation={navigation}
+                route={route}
+                style={options.headerStyle}
+                title={title}
+                user={user}
+              />
+            );
+          },
           headerStyle: {
             backgroundColor: NAVBAR.backgroundColor,
           },
@@ -185,10 +201,13 @@ export default function App() {
           );
         })}
         {user ? (
-          <Drawer.Screen key='LogOut' name='Log Out' component={LogOut} />
+          <>
+            <Drawer.Screen key='Profile' name='Profile' component={Profile} />
+            <Drawer.Screen key='LogOut' name='Log Out' component={LogOut} />
+          </>
         ) : (
           <>
-            <Drawer.Screen key='SignIn' name='Sign In' component={SignIn} />
+            <Drawer.Screen key='SignIn' name='Login' component={SignIn} />
             <Drawer.Screen key='SignUp' name='Sign Up' component={SignUp} />
           </>
         )}
@@ -206,6 +225,8 @@ export default function App() {
     //   <SignIn />
     // </SafeAreaView>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({});

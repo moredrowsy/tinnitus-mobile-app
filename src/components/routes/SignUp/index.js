@@ -12,6 +12,7 @@ import {
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
+import { useKeyboardStatus } from '../../../hooks';
 
 // Firebase
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -24,6 +25,8 @@ const SignUp = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errMsg, setErrMsg] = useState(null);
+
+  const keyboardStatus = useKeyboardStatus();
 
   const signUp = async () => {
     try {
@@ -41,7 +44,6 @@ const SignUp = ({ navigation }) => {
       setErrMsg(null);
       navigation.navigate('Dashboard');
     } catch (err) {
-      console.log({ err });
       const errCode = err.code;
 
       if (errCode === 'auth/email-already-in-use') {
@@ -60,9 +62,11 @@ const SignUp = ({ navigation }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`-mt-24`}>
-        <EarLogo width={100} height={100} />
-      </View>
+      {!keyboardStatus && (
+        <View style={{ marginTop: -150 }}>
+          <EarLogo width={75} height={75} />
+        </View>
+      )}
       <View>
         <Text style={tw`mt-5 text-center text-3xl font-bold text-gray-900`}>
           Create an account
