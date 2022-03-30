@@ -7,20 +7,23 @@ import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
 import Sound from '../../Sound';
 
+// Firebase
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../../store/firebase';
+
 // Redux
 import { useSelector } from 'react-redux';
 import { selectSounds } from '../../../store/redux/slices/sounds';
+import { selectUsernames } from '../../../store/redux/slices/usernames';
 
-const Sounds = () => {
+const Sounds = ({ navigation }) => {
+  const usernames = useSelector(selectUsernames);
+  const [user, loading, error] = useAuthState(auth);
+  const userId = user ? user.uid : null;
   const sounds = useSelector(selectSounds);
   const soundsArray = Object.keys(sounds)
     .map((key) => sounds[key])
     .sort((a, b) => b.timestamp - a.timestamp);
-
-  const changeSoundVolume = () => {};
-  const toggleSoundFile = () => {};
-  const usernames = {};
-  const userId = '123';
 
   return (
     <SafeAreaView>
@@ -28,21 +31,16 @@ const Sounds = () => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`m-5`}>
-        <Sound
-          key={soundsArray[0].id}
-          sound={soundsArray[0]}
-          userId={userId}
-          usernames={usernames}
-        />
-        {/* {soundsArray.map((sound) => (
+      <View style={tw`m-2`}>
+        {soundsArray.map((sound) => (
           <Sound
             key={sound.id}
             sound={sound}
             userId={userId}
             usernames={usernames}
+            navigation={navigation}
           />
-        ))} */}
+        ))}
       </View>
     </SafeAreaView>
   );

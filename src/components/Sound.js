@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // React Native
 import { View, Text } from 'react-native';
+import Slider from '@react-native-community/slider';
 import Item from './Item';
 
 // Redux
@@ -14,9 +15,14 @@ import {
 import { changeSoundVolume, toggleSoundFile } from '../store/cache';
 import { VOLUME } from '../constants';
 
-const Sound = ({ sound, userId, usernames }) => {
+const Sound = ({ navigation, sound, userId, usernames }) => {
   const dispatch = useDispatch();
-  const userSound = useSelector((state) => state.user.sounds[sound.id]);
+  const userSound = useSelector((state) => {
+    if (sound) {
+      return state.user.sounds[sound.id];
+    }
+    return {};
+  });
   const userVote = useSelector((state) => {
     if (sound && state.user && state.user.sounds.hasOwnProperty(sound.id)) {
       return state.user.sounds[sound.id].vote;
@@ -30,11 +36,11 @@ const Sound = ({ sound, userId, usernames }) => {
     return VOLUME.default;
   });
 
-  const [volume, setVolume] = useState(userVolume);
+  const [volume, setVolume] = useState(Number(userVolume));
 
   // Update default volume to user volume if it exists
   useEffect(() => {
-    if (userSound && userSound.volume !== VOLUME.default) {
+    if (userSound && userSound.volume && userSound.volume !== VOLUME.default) {
       setVolume(userSound.volume);
     }
   }, [userSound]);
@@ -67,13 +73,22 @@ const Sound = ({ sound, userId, usernames }) => {
       soundId: sound.id,
       storageKey: sound.storagePath,
       userId,
-      volume,
+      volume: newVolValue,
+    });
+  };
+
+  const gotoComment = () => {
+    navigation.navigate('SoundPost', {
+      collectionId: sound.id,
+      path: 'sounds',
+      userId,
+      usernames,
     });
   };
 
   return (
     <Item
-      commentLink={`/sounds/${sound.id}`}
+      gotoComment={gotoComment}
       decrementVote={decrementVote}
       incrementVote={incrementVote}
       item={sound}
@@ -82,9 +97,17 @@ const Sound = ({ sound, userId, usernames }) => {
       usernames={usernames}
       userVote={userVote || 0}
     >
-      <View>
-        <Text>Content</Text>
-      </View>
+      <Slider
+        style={{ width: '100%', height: 40 }}
+        minimumValue={VOLUME.min}
+        maximumValue={VOLUME.max}
+        step={VOLUME.step}
+        minimumTrackTintColor='#3b82f6'
+        maximumTrackTintColor='#3b82f6'
+        thumbTintColor='#ec4899'
+        value={volume}
+        onValueChange={onVolChange}
+      />
     </Item>
   );
 };

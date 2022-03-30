@@ -1,5 +1,5 @@
-import { getStorage, getBlob, ref } from "firebase/storage";
-import { blobToDataURL } from "../../utils";
+import { getStorage, getBlob, ref } from 'firebase/storage';
+import { blobToDataURL } from '../../utils';
 
 // Create a reference to the file we want to download
 const storage = getStorage();

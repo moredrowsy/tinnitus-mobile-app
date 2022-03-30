@@ -1,6 +1,3 @@
-// Web only
-// import * as Tone from 'tone';
-
 // Redux
 import { updateMix, updateMixStatus } from '../redux/slices/mixes';
 import { setNoise, updateNoiseVolume } from '../redux/slices/noises';
@@ -14,23 +11,40 @@ import {
   updateSoundVolume,
 } from '../redux/slices/sounds';
 import {
+  updateNoiseVolumeAsync,
   updateUserMixTrackVolumeAsync,
-  updateUserMixVolume,
-  updateUserSoundVolume,
   updateUserSoundVolumeAsync,
 } from '../redux/slices/user';
 
-import { VOLUME } from '../../constants';
+import { DEBOUNCE_WAIT, VOLUME } from '../../constants';
+import { debounce } from '../../utils';
 
 export const soundCache = {};
+
+const changeNoiseVolumeDebounce = debounce(
+  ({ color, dispatch, userId, volume }) => {
+    try {
+      dispatch(updateNoiseVolume({ color, volume }));
+      dispatch(
+        updateNoiseVolumeAsync({
+          color,
+          userId,
+          volume,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  DEBOUNCE_WAIT
+);
 
 export function changeNoiseVolume({ color, dispatch, userId, volume }) {
   if (soundCache.hasOwnProperty(color)) {
     const { player } = soundCache[color];
-
     player.volume.value = volume;
-    dispatch(updateNoiseVolume({ color, volume }));
   }
+  changeNoiseVolumeDebounce({ color, dispatch, userId, volume });
 }
 
 export function toggleNoise({ color, dispatch, volume }) {
@@ -44,20 +58,23 @@ export function toggleNoise({ color, dispatch, volume }) {
   dispatch(setNoise({ noise: { color, status: player.state } }));
 }
 
-export function toggleSound({ dispatch, id, storageKey, volume }) {
+export async function toggleSound({ dispatch, id, storageKey, volume }) {
   if (soundCache.hasOwnProperty(storageKey)) {
     const { player } = soundCache[storageKey];
-    player.volume.value = volume;
+    // player.volume.value = volume;
 
     if (player.state === 'started') {
-      player.stop();
+      await player.stop();
       dispatch(updateSoundStatus({ id, status: 'stopped' }));
     } else {
-      player.start();
+      await player.setVolume(volume);
+      await player.start();
       dispatch(updateSoundStatus({ id, status: 'started' }));
     }
   }
 }
+
+import { Sound } from './sound';
 
 export async function toggleSoundFile({ dispatch, id, storageKey, volume }) {
   // Check if there is a sound player in storage
@@ -67,22 +84,46 @@ export async function toggleSoundFile({ dispatch, id, storageKey, volume }) {
   // No sound player, need to dl and load file to new player
   else {
     const onSuccess = async (dataURL) => {
-      //   const player = new Tone.Player().toDestination();
-      //   player.loop = true;
-      //   player.volume.value = volume;
-      //   await player.load(dataURL);
-      //   soundCache[storageKey] = { player };
-      //   player.start();
-      //   dispatch(
-      //     updateSound({
-      //       id,
-      //       sound: { status: 'started', volume: VOLUME.default },
-      //     })
-      //   );
+      const player = new Sound();
+
+      try {
+        await player.load(dataURL);
+        soundCache[storageKey] = { player };
+
+        await player.setVolume(volume);
+        await player.start();
+      } catch (e) {
+        console.log(e);
+      }
+
+      dispatch(
+        updateSound({
+          id,
+          sound: { status: 'started', volume: VOLUME.default },
+        })
+      );
     };
     dispatch(getSoundFileAsync({ id, storageKey, onSuccess }));
   }
 }
+
+const changeSoundVolumeDebounce = debounce(
+  ({ dispatch, soundId, userId, volume }) => {
+    try {
+      dispatch(updateSoundVolume({ id: soundId, volume }));
+      dispatch(
+        updateUserSoundVolumeAsync({
+          userId,
+          soundId,
+          volume,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  DEBOUNCE_WAIT
+);
 
 export function changeSoundVolume({
   dispatch,
@@ -93,19 +134,10 @@ export function changeSoundVolume({
 }) {
   if (soundCache.hasOwnProperty(storageKey)) {
     const { player } = soundCache[storageKey];
-    player.volume.value = volume;
+    player.setVolume(volume);
   }
 
-  dispatch(updateSoundVolume({ id: soundId, volume }));
-  dispatch(updateUserSoundVolume({ soundId, volume }));
-
-  dispatch(
-    updateUserSoundVolumeAsync({
-      userId,
-      soundId,
-      volume,
-    })
-  );
+  changeSoundVolumeDebounce({ dispatch, soundId, userId, volume });
 }
 
 const stopPlayer = ({ dispatch, id, storageKey }) => {
@@ -179,6 +211,25 @@ export function toggleMix({ dispatch, mix, soundList, userMix }) {
   }
 }
 
+const changeMixSoundVolumeDebounce = debounce(
+  ({ dispatch, mixId, soundId, userId, volume }) => {
+    try {
+      dispatch(updateSoundVolume({ id: soundId, volume }));
+      dispatch(
+        updateUserMixTrackVolumeAsync({
+          mixId,
+          soundId,
+          userId,
+          volume,
+        })
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  DEBOUNCE_WAIT
+);
+
 export function changeMixSoundVolume({
   dispatch,
   mixId,
@@ -192,15 +243,5 @@ export function changeMixSoundVolume({
     player.volume.value = volume;
   }
 
-  dispatch(updateSoundVolume({ id: soundId, volume }));
-  dispatch(updateUserMixVolume({ mixId, soundId, volume }));
-
-  dispatch(
-    updateUserMixTrackVolumeAsync({
-      mixId,
-      soundId,
-      userId,
-      volume,
-    })
-  );
+  changeMixSoundVolumeDebounce({ dispatch, mixId, soundId, userId, volume });
 }

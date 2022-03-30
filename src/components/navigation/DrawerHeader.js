@@ -7,7 +7,7 @@ import tw from 'twrnc';
 
 import { NAVBAR } from '../../constants/tailwindcss';
 
-const AuthedHeader = ({ navigation, route, title, user }) => {
+const DrawerHeader = ({ navigation, route, title, user }) => {
   const toggleDrawer = () => {
     navigation.toggleDrawer();
   };
@@ -56,4 +56,4 @@ const AuthedHeader = ({ navigation, route, title, user }) => {
   );
 };
 
-export default AuthedHeader;
+export default DrawerHeader;
