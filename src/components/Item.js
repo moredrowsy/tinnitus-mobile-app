@@ -78,7 +78,7 @@ const Item = ({
             item.tags.map((tag) => (
               <View key={tag}>
                 <Text
-                  style={tw`inline text-xs bg-gray-300 rounded-full px-1 text-gray-700 mr-1`}
+                  style={tw`text-xs bg-gray-300 rounded-full px-1 text-gray-700 m-1`}
                 >
                   #{tag}
                 </Text>

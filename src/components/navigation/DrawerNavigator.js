@@ -3,16 +3,15 @@ import React from 'react';
 // React Native
 import { View, Text } from 'react-native';
 import DrawerHeader from './DrawerHeader';
+import MixesStackNavigator from './MixesStackNavigator';
 import SoundStackNavigator from './SoundStackNavigator';
 import {
   Dashboard,
   LogOut,
-  Mixes,
   NoiseGenerator,
   Profile,
   SignIn,
   SignUp,
-  Sounds,
 } from '../routes';
 
 // React Native Navigation
@@ -70,7 +69,7 @@ const DrawerNavigator = ({ user }) => {
         <Drawer.Screen name='Dashboard' component={Dashboard} />
         <Drawer.Screen name='Noise' component={NoiseGenerator} />
         <Drawer.Screen name='Sounds' component={SoundStackNavigator} />
-        <Drawer.Screen name='Mixes' component={Mixes} />
+        <Drawer.Screen name='Mixes' component={MixesStackNavigator} />
         {user ? (
           <>
             <Drawer.Screen key='Profile' name='Profile' component={Profile} />

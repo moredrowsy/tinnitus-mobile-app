@@ -69,6 +69,7 @@ const SignIn = ({ navigation }) => {
           style={tw`px-3 py-2`}
           keyboardType='email-address'
           placeholder='Email address'
+          autoComplete='email'
           value={email}
           onChangeText={setEmail}
         />
@@ -81,6 +82,7 @@ const SignIn = ({ navigation }) => {
           keyboardType='default'
           secureTextEntry={true}
           placeholder='Passowrd'
+          autoComplete='password'
           value={password}
           onChangeText={setPassword}
         />

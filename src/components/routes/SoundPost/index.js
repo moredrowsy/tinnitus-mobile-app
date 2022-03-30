@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // React Native
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
 import Sound from '../../Sound';
@@ -36,7 +36,7 @@ const SoundPost = ({ navigation, route }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`m-2`}>
+      <ScrollView style={tw`m-2`}>
         <Sound
           sound={sound}
           userId={userId}
@@ -50,7 +50,7 @@ const SoundPost = ({ navigation, route }) => {
           userId={userId}
           usernames={usernames}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

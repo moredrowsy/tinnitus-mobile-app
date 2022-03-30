@@ -1,7 +1,7 @@
 import React from 'react';
 
 // React Native
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
@@ -31,7 +31,7 @@ const Sounds = ({ navigation }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`m-2`}>
+      <ScrollView style={tw`m-2`}>
         {soundsArray.map((sound) => (
           <Sound
             key={sound.id}
@@ -41,7 +41,7 @@ const Sounds = ({ navigation }) => {
             navigation={navigation}
           />
         ))}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

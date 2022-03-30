@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 // React Native
 import { View, Text } from 'react-native';
-import Slider from '@react-native-community/slider';
+import { Slider } from '@miblanchard/react-native-slider';
+import tw from 'twrnc';
 import Item from './Item';
 
 // Redux
@@ -97,17 +98,20 @@ const Sound = ({ navigation, sound, userId, usernames }) => {
       usernames={usernames}
       userVote={userVote || 0}
     >
-      <Slider
-        style={{ width: '100%', height: 40 }}
-        minimumValue={VOLUME.min}
-        maximumValue={VOLUME.max}
-        step={VOLUME.step}
-        minimumTrackTintColor='#3b82f6'
-        maximumTrackTintColor='#3b82f6'
-        thumbTintColor='#ec4899'
-        value={volume}
-        onValueChange={onVolChange}
-      />
+      <View style={tw`w-full`}>
+        <Slider
+          containerStyle={tw`w-full h-3`}
+          minimumValue={VOLUME.min}
+          maximumValue={VOLUME.max}
+          step={VOLUME.step}
+          minimumTrackTintColor='#3b82f6'
+          maximumTrackTintColor='#3b82f6'
+          thumbTintColor='#ec4899'
+          thumbStyle={tw`h-3 w-3`}
+          value={volume}
+          onValueChange={onVolChange}
+        />
+      </View>
     </Item>
   );
 };

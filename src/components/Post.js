@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // React Native
-import {
-  SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, SafeAreaView, Text, TextInput, View } from 'react-native';
 import FocusAwareStatusBar from './FocusAwareStatusBar';
 import tw from 'twrnc';
 
@@ -50,7 +44,7 @@ const Post = ({ collectionId, path, posts, userId, usernames }) => {
       />
       <TextInput
         style={[
-          tw`h-24 border border-gray-300 rounded-md p-2`,
+          tw`h-24 bg-white border border-gray-300 rounded-md p-2`,
           { textAlignVertical: 'top' },
         ]}
         multiline={true}
@@ -59,16 +53,14 @@ const Post = ({ collectionId, path, posts, userId, usernames }) => {
         value={body}
         onChangeText={setBody}
       />
-      <TouchableOpacity
-        style={tw`flex justify-center items-center mt-2 mb-5`}
-        onPress={onSubmit}
-      >
-        <View
+      <View style={tw`flex justify-center items-center mt-2 mb-5`}>
+        <Pressable
           style={tw`flex justify-center items-center bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2`}
+          onPress={onSubmit}
         >
           <Text style={tw`text-gray-700 font-bold text-sm`}>Submit Post</Text>
-        </View>
-      </TouchableOpacity>
+        </Pressable>
+      </View>
 
       {posts &&
         Object.keys(posts)
