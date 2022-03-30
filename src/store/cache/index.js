@@ -61,13 +61,12 @@ export function toggleNoise({ color, dispatch, volume }) {
 export async function toggleSound({ dispatch, id, storageKey, volume }) {
   if (soundCache.hasOwnProperty(storageKey)) {
     const { player } = soundCache[storageKey];
-    // player.volume.value = volume;
+    await player.setVolume(volume);
 
     if (player.state === 'started') {
       await player.stop();
       dispatch(updateSoundStatus({ id, status: 'stopped' }));
     } else {
-      await player.setVolume(volume);
       await player.start();
       dispatch(updateSoundStatus({ id, status: 'started' }));
     }
@@ -84,12 +83,12 @@ export async function toggleSoundFile({ dispatch, id, storageKey, volume }) {
   // No sound player, need to dl and load file to new player
   else {
     const onSuccess = async (dataURL) => {
-      const player = new Sound();
-
       try {
+        const player = new Sound();
         await player.load(dataURL);
         soundCache[storageKey] = { player };
 
+        await player.setLoop(true);
         await player.setVolume(volume);
         await player.start();
       } catch (e) {
@@ -163,12 +162,16 @@ export function toggleMix({ dispatch, mix, soundList, userMix }) {
     const onSuccess = async (datas) => {
       // Build temporary player storage
       for (const data of datas) {
-        // const { storageKey, dataURL } = data;
-        // // Create player
-        // const player = new Tone.Player().toDestination();
-        // player.loop = true;
-        // await player.load(dataURL);
-        // soundCache[storageKey] = { player };
+        const { storageKey, dataURL } = data;
+        // Create player
+        try {
+          const player = new Sound();
+          await player.load(dataURL);
+          await player.setLoop(true);
+          soundCache[storageKey] = { player };
+        } catch (e) {
+          console.log(e);
+        }
       }
 
       // started player files
@@ -187,10 +190,11 @@ export function toggleMix({ dispatch, mix, soundList, userMix }) {
           // Adjust sound volume from user's mixVolumes
           if (mixVolumes.hasOwnProperty(sound.id)) {
             const volume = mixVolumes[sound.id];
-            player.volume.value = volume;
+
+            await player.setVolume(volume);
+            await player.start();
           }
 
-          player.start();
           dispatch(
             updateSound({
               id,
@@ -230,7 +234,7 @@ const changeMixSoundVolumeDebounce = debounce(
   DEBOUNCE_WAIT
 );
 
-export function changeMixSoundVolume({
+export async function changeMixSoundVolume({
   dispatch,
   mixId,
   soundId,
@@ -240,7 +244,7 @@ export function changeMixSoundVolume({
 }) {
   if (soundCache.hasOwnProperty(storageKey)) {
     const { player } = soundCache[storageKey];
-    player.volume.value = volume;
+    player.setVolume(volume);
   }
 
   changeMixSoundVolumeDebounce({ dispatch, mixId, soundId, userId, volume });

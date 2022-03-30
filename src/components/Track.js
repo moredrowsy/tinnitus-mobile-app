@@ -59,7 +59,7 @@ const Track = ({ isSelcted, mixId, sound, toggleSelected, userId }) => {
     <View style={tw`${isSelcted ? 'bg-sky-400' : ''}`}>
       <Pressable
         style={tw`flex-row justify-center items-center`}
-        onPress={() => toggleSelected(sound.id)}
+        onPress={toggleSelected ? () => toggleSelected(sound.id) : null}
       >
         <Text style={tw`flex-1`}>{sound.title}</Text>
         <PlayButton status={sound.status} toggleFn={onToggleSound} />
