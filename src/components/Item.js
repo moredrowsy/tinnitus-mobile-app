@@ -2,7 +2,6 @@ import React from 'react';
 
 // React Native
 import { Pressable, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from 'react-native-vector-icons';
 import tw from 'twrnc';
 import PlayButton from './PlayButton';
@@ -10,8 +9,6 @@ import PlayButton from './PlayButton';
 // Redux
 import { useDispatch } from 'react-redux';
 import { getUsernameByIdAsync } from '../store/redux/slices/usernames';
-
-import { NAVBAR } from '../constants/tailwindcss';
 
 const Item = ({
   children,
@@ -25,7 +22,6 @@ const Item = ({
   userVote,
 }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   // Exit if no item
   if (!item) return null;

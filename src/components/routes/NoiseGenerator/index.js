@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 
 // React Native
-import { SafeAreaView, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView, Text } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
@@ -12,7 +12,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../../store/firebase';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { refreshReduxAsync } from '../../../store/redux/slices/common';
 import { selectNoises } from '../../../store/redux/slices/noises';
 
 const noiseBgColors = {
@@ -30,6 +31,7 @@ const noiseDescriptions = {
 };
 
 const NoiseGenerator = () => {
+  const dispatch = useDispatch();
   const [user, loading, error] = useAuthState(auth);
   const userId = user ? user.uid : null;
 
@@ -38,13 +40,24 @@ const NoiseGenerator = () => {
     (noiseColor) => noises[noiseColor]
   );
 
+  // Refresh control
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    dispatch(refreshReduxAsync());
+  };
+
   return (
     <SafeAreaView>
       <FocusAwareStatusBar
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`m-2`}>
+      <ScrollView
+        style={tw`m-2`}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Text style={tw`mb-5 text-sm text-center font-medium text-gray-700`}>
           Generate noise sounds. There are different{' '}
           <Text style={tw`font-bold italic`}>colors</Text> of noise and each
@@ -59,7 +72,7 @@ const NoiseGenerator = () => {
             userId={userId}
           />
         ))}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

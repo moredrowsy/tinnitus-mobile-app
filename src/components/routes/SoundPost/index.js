@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // React Native
-import { SafeAreaView, ScrollView } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView } from 'react-native';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
 import Sound from '../../Sound';
@@ -9,6 +9,7 @@ import Post from '../../Post';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { refreshReduxAsync } from '../../../store/redux/slices/common';
 import {
   selectPostCollections,
   fetchPostsByCollectionIdAsync,
@@ -26,6 +27,12 @@ const SoundPost = ({ navigation, route }) => {
   const sound = sounds[collectionId];
   const dispatch = useDispatch();
 
+  // Refresh control
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    dispatch(refreshReduxAsync({ post: { collectionId, path } }));
+  };
+
   useEffect(() => {
     dispatch(fetchPostsByCollectionIdAsync({ collectionId, path }));
   }, [dispatch, collectionId, path]);
@@ -36,7 +43,12 @@ const SoundPost = ({ navigation, route }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <ScrollView style={tw`m-2`}>
+      <ScrollView
+        style={tw`m-2`}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Sound
           sound={sound}
           userId={userId}

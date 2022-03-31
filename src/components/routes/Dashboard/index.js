@@ -1,7 +1,7 @@
 import React from 'react';
 
 // React Native
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 
@@ -12,7 +12,9 @@ const Dashboard = () => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <Text>Dashboard</Text>
+      <ScrollView>
+        <Text>Dashboard</Text>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // React Native
-import { SafeAreaView, Text, View } from 'react-native';
+import { RefreshControl, SafeAreaView, ScrollView } from 'react-native';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
@@ -10,6 +10,7 @@ import Post from '../../Post';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { refreshReduxAsync } from '../../../store/redux/slices/common';
 import {
   selectPostCollections,
   fetchPostsByCollectionIdAsync,
@@ -27,6 +28,12 @@ const MixPost = ({ navigation, route }) => {
   const mix = mixes[collectionId];
   const dispatch = useDispatch();
 
+  // Refresh control
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    dispatch(refreshReduxAsync({ post: { collectionId, path } }));
+  };
+
   useEffect(() => {
     dispatch(fetchPostsByCollectionIdAsync({ collectionId, path }));
   }, [dispatch, collectionId, path]);
@@ -37,7 +44,12 @@ const MixPost = ({ navigation, route }) => {
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
       />
-      <View style={tw`m-2`}>
+      <ScrollView
+        style={tw`m-2`}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <Mix mix={mix} sounds={sounds} userId={userId} usernames={usernames} />
         <Post
           collectionId={collectionId}
@@ -46,7 +58,7 @@ const MixPost = ({ navigation, route }) => {
           userId={userId}
           usernames={usernames}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
