@@ -98,13 +98,7 @@ const AddMix = ({ navigation, sounds, userId }) => {
   };
 
   if (!userId) {
-    return (
-      <NeedAuthedUserMsg
-        navigation={navigation}
-        authed={userId ? true : false}
-        msg='to add mixes'
-      />
-    );
+    return <NeedAuthedUserMsg navigation={navigation} msg='to add mixes' />;
   }
 
   return (

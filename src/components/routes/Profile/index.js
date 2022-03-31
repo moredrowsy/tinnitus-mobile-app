@@ -49,13 +49,7 @@ const Profile = () => {
   };
 
   if (!user) {
-    return (
-      <NeedAuthedUserMsg
-        navigation={navigation}
-        authed={user ? true : false}
-        msg=''
-      />
-    );
+    return <NeedAuthedUserMsg navigation={navigation} msg='' />;
   }
 
   return (
