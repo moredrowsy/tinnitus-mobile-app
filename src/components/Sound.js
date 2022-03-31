@@ -105,7 +105,7 @@ const Sound = ({ navigation, sound, userId, usernames }) => {
           maximumValue={VOLUME.max}
           step={VOLUME.step}
           minimumTrackTintColor='#3b82f6'
-          maximumTrackTintColor='#3b82f6'
+          maximumTrackTintColor='#dbeafe'
           thumbTintColor='#ec4899'
           thumbStyle={tw`h-3 w-3`}
           value={volume}

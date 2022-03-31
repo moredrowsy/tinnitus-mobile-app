@@ -45,6 +45,10 @@ import { ACRN, FREQ, NOISE_COLOR, VOLUME } from '../constants';
 import { shuffleArray } from '../utils';
 import { NAVBAR } from '../constants/tailwindcss';
 
+import { soundCache } from '../store/cache';
+import { Sound } from '../store/cache/sound';
+import { noiseFiles } from '../store/cache/noises';
+
 // Ignore setTimeout duration warnings
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs(['Setting a timer']);
@@ -66,6 +70,37 @@ const App = () => {
   const dispatch = useDispatch();
   const mixes = useSelector(selectMixes);
   const usernames = useSelector(selectUsernames);
+
+  // Add noise color players
+  useEffect(() => {
+    const loadNoises = async () => {
+      const noiseInfos = [];
+
+      for (const [color, file] of Object.entries(noiseFiles)) {
+        if (!soundCache.hasOwnProperty(color)) {
+          const player = new Sound();
+          await player.loadLocalFile(file);
+          await player.setLoop(true);
+          await player.setVolume(VOLUME.default);
+          soundCache[color] = { player };
+
+          const noise = {
+            noise: {
+              color,
+              status: 'stopped',
+              volume: VOLUME.default,
+            },
+          };
+          noiseInfos.push(noise);
+        }
+      }
+
+      if (noiseInfos.length > 0) {
+        dispatch(setNoises(noiseInfos));
+      }
+    };
+    loadNoises();
+  }, [dispatch]);
 
   // Fetch and update user information
   // Only fetch when user object is different

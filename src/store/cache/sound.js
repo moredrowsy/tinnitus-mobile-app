@@ -20,6 +20,12 @@ export class Sound {
     });
   }
 
+  loadLocalFile(file) {
+    return new Promise((resolve, reject) => {
+      this.player.loadAsync(file).then(resolve).catch(reject);
+    });
+  }
+
   start() {
     return new Promise((resolve, reject) => {
       this.player

@@ -39,21 +39,21 @@ const changeNoiseVolumeDebounce = debounce(
   DEBOUNCE_WAIT
 );
 
-export function changeNoiseVolume({ color, dispatch, userId, volume }) {
+export async function changeNoiseVolume({ color, dispatch, userId, volume }) {
   if (soundCache.hasOwnProperty(color)) {
     const { player } = soundCache[color];
-    player.volume.value = volume;
+    player.setVolume(volume);
   }
   changeNoiseVolumeDebounce({ color, dispatch, userId, volume });
 }
 
-export function toggleNoise({ color, dispatch, volume }) {
+export async function toggleNoise({ color, dispatch, volume }) {
   const { player } = soundCache[color];
   if (player.state === 'started') {
-    player.stop();
+    await player.stop();
   } else {
-    player.volume.value = volume;
-    player.start();
+    await player.setVolume(volume);
+    await player.start();
   }
   dispatch(setNoise({ noise: { color, status: player.state } }));
 }
