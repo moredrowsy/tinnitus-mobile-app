@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 
 // React Native
 import {
+  Pressable,
   SafeAreaView,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
   Text,
   View,
 } from 'react-native';
+import { FontAwesome5 } from 'react-native-vector-icons';
 import { NAVBAR } from '../../../constants/tailwindcss';
 import FocusAwareStatusBar from '../../FocusAwareStatusBar';
 import tw from 'twrnc';
@@ -73,7 +74,7 @@ const SignUp = ({ navigation }) => {
         </Text>
       </View>
       <View
-        style={tw`w-full mt-5 bg-white border border-gray-300 rounded-tl-md rounded-tr--md`}
+        style={tw`w-full mt-5 bg-white border border-gray-300 rounded-tl-md rounded-tr-md`}
       >
         <TextInput
           style={tw`px-3 py-2`}
@@ -95,12 +96,15 @@ const SignUp = ({ navigation }) => {
           onChangeText={setPassword}
         />
       </View>
-      <TouchableOpacity
+      <Pressable
         style={tw`mt-5 w-full py-2 px-4 text-sm font-medium rounded-md bg-indigo-600`}
         onPress={signUp}
       >
+        <View style={tw`absolute top-1 left-2`}>
+          <FontAwesome5 name='lock' size={25} color='#6366f1' />
+        </View>
         <Text style={tw`text-center text-white`}>Sign Up</Text>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   );
 };
