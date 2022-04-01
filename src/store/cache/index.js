@@ -1,3 +1,15 @@
+// React Native
+import {
+  checkFileExists,
+  deleteDir,
+  ensureDirExists,
+  getDirUri,
+  getFileUri,
+  readStringFromLocalAsync,
+  writeStringToLocalAsync,
+} from '../localFS';
+import { Sound } from './sound';
+
 // Redux
 import { updateMix, updateMixStatus } from '../redux/slices/mixes';
 import { setNoise, updateNoiseVolume } from '../redux/slices/noises';
@@ -73,21 +85,64 @@ export async function toggleSound({ dispatch, id, storageKey, volume }) {
   }
 }
 
-import { Sound } from './sound';
-
 export async function toggleSoundFile({ dispatch, id, storageKey, volume }) {
+  // React Native
+  // Check sound file by id exists in local directory
+  const fileUri = getFileUri('sounds', id);
+  const fileExists = await checkFileExists(fileUri);
+
   // Check if there is a sound player in storage
   if (soundCache.hasOwnProperty(storageKey)) {
     toggleSound({ dispatch, id, storageKey, volume });
+  }
+  // If file exists locally as data string, then load it
+  else if (fileExists) {
+    // Set status to downloading from local
+    dispatch(updateSoundStatus({ id, status: 'downloading' }));
+
+    // Read dataURL from local file
+    const dataURL = await readStringFromLocalAsync(fileUri);
+
+    // Create new player and load dataURL
+    const player = new Sound();
+    await player.load(dataURL);
+
+    // Set status to complete from local
+    dispatch(updateSoundStatus({ id, status: 'complete' }));
+
+    // Add to cache
+    soundCache[storageKey] = { player };
+
+    // Start player
+    await player.setLoop(true);
+    await player.setVolume(volume);
+    await player.start();
+
+    // Update redux
+    dispatch(
+      updateSound({
+        id,
+        sound: { status: 'started', volume: VOLUME.default },
+      })
+    );
   }
   // No sound player, need to dl and load file to new player
   else {
     const onSuccess = async (dataURL) => {
       try {
+        // React Native
+        // Save dataURL locally
+        const soundsDir = getDirUri('sounds');
+        await ensureDirExists(soundsDir);
+        const soundFileURI = getFileUri('sounds', id);
+        await writeStringToLocalAsync(soundFileURI, dataURL);
+
+        // Create new player and add to cache
         const player = new Sound();
         await player.load(dataURL);
         soundCache[storageKey] = { player };
 
+        // Start player
         await player.setLoop(true);
         await player.setVolume(volume);
         await player.start();
@@ -95,6 +150,7 @@ export async function toggleSoundFile({ dispatch, id, storageKey, volume }) {
         console.log(e);
       }
 
+      // Update redux
       dispatch(
         updateSound({
           id,

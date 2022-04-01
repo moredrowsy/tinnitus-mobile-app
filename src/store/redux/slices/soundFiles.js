@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getStorageFile } from '../../firebase/helpers';
+import {
+  checkFileExists,
+  getFileUri,
+  readStringFromLocalAsync,
+} from '../../localFS';
 import { updateSoundStatus } from '../slices/sounds';
 
 const sliceKey = 'soundFiles';
@@ -57,7 +62,22 @@ export const getSoundFilesAsync =
 
         if (!soundFiles.hasOwnProperty(storageKey)) {
           dispatch(updateSoundStatus({ id, status: 'downloading' }));
-          const dataURL = await getStorageFile(storageKey);
+          let dataURL = '';
+
+          // React Native
+          // Check if there is file in local storage
+          const fileUri = getFileUri('sounds', id);
+          const fileExists = await checkFileExists(fileUri);
+
+          // If it exists in local storage, get it from local
+          if (fileExists) {
+            dataURL = await readStringFromLocalAsync(fileUri);
+          }
+          // Doesn't exist, get it from firebase
+          else {
+            dataURL = await getStorageFile(storageKey);
+          }
+
           datas.push({ id, storageKey, dataURL });
           dispatch(addSoundFile({ storageKey, dataURL }));
           dispatch(updateSoundStatus({ id, status: 'complete' }));

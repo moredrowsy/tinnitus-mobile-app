@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 // React Native
 import { StyleSheet } from 'react-native';
 import { DrawerNavigator } from './navigation';
+import { ensureDirExists, getDirUri } from '../store/localFS';
 
 // Firebase
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -42,6 +43,18 @@ const App = () => {
   }
 
   const dispatch = useDispatch();
+
+  // Create 'sounds' and 'mixes' directory in local 'FileSystem.documentDirectory'
+  useEffect(() => {
+    const createLocalDirectories = async () => {
+      const soundsDir = getDirUri('sounds');
+      const mixesDir = getDirUri('mixes');
+
+      ensureDirExists(soundsDir);
+      ensureDirExists(mixesDir);
+    };
+    createLocalDirectories();
+  });
 
   // Add noise color players
   useEffect(() => {
