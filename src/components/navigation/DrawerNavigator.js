@@ -1,11 +1,11 @@
 import React from 'react';
 
 // React Native
-import { View, Text } from 'react-native';
 import DrawerHeader from './DrawerHeader';
 import MixesStackNavigator from './MixesStackNavigator';
 import SoundStackNavigator from './SoundStackNavigator';
 import {
+  AcrnPage,
   Dashboard,
   LogOut,
   NoiseGenerator,
@@ -67,6 +67,7 @@ const DrawerNavigator = ({ user }) => {
         backBehavior='history'
       >
         <Drawer.Screen name='Dashboard' component={Dashboard} />
+        <Drawer.Screen name='ACRN' component={AcrnPage} />
         <Drawer.Screen name='Noise' component={NoiseGenerator} />
         <Drawer.Screen name='Sounds' component={SoundStackNavigator} />
         <Drawer.Screen name='Mixes' component={MixesStackNavigator} />

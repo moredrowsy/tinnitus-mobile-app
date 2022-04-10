@@ -1,3 +1,4 @@
+export { default as AcrnPage } from './AcrnPage';
 export { default as Dashboard } from './Dashboard';
 export { default as LogOut } from './LogOut';
 export { default as NoiseGenerator } from './NoiseGenerator';

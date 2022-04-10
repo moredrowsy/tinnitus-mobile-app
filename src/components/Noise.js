@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeNoiseVolume, toggleNoise } from '../store/cache';
 import { VOLUME } from '../constants';
 
-const Noise = ({ description, noise, noiseBgColor, userId }) => {
+const Noise = ({ noise, noiseBgColor, userId }) => {
   const dispatch = useDispatch();
   const userVolume = useSelector((state) => {
     if (noise && state.user && state.user.noises.hasOwnProperty(noise.color)) {

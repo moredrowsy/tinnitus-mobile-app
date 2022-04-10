@@ -9,6 +9,7 @@ import {
   writeStringToLocalAsync,
 } from '../localFS';
 import { Sound } from './sound';
+import { toneFiles } from './tones';
 
 // Redux
 import { updateMix, updateMixStatus } from '../redux/slices/mixes';
@@ -28,8 +29,9 @@ import {
   updateUserSoundVolumeAsync,
 } from '../redux/slices/user';
 
-import { DEBOUNCE_WAIT, VOLUME } from '../../constants';
+import { ACRN, DEBOUNCE_WAIT, VOLUME } from '../../constants';
 import { debounce } from '../../utils';
+import { setAcrn } from '../redux/slices/acrns';
 
 export const soundCache = {};
 
@@ -305,3 +307,51 @@ export async function changeMixSoundVolume({
 
   changeMixSoundVolumeDebounce({ dispatch, mixId, soundId, userId, volume });
 }
+
+export const toggleAcrnPlay = async ({
+  acrns,
+  dispatch,
+  frequency,
+  type,
+  volume,
+}) => {
+  let player;
+  let status = acrns[type].status;
+
+  if (type === ACRN.type.tone) {
+    // Check if tone exists
+    if (
+      !soundCache.hasOwnProperty(frequency) &&
+      toneFiles.hasOwnProperty(frequency)
+    ) {
+      const file = toneFiles[frequency];
+      player = new Sound();
+      await player.loadLocalFile(file);
+      soundCache[frequency] = { player };
+    } else {
+      player = soundCache[frequency].player;
+    }
+
+    if (status === 'stopped') {
+      await player.setLoop(true);
+      await player.setVolume(volume);
+      await player.start();
+      status = 'started';
+    } else {
+      await player.stop();
+      status = 'stopped';
+    }
+  }
+
+  dispatch(setAcrn({ type: ACRN.type.tone, acrn: { status } }));
+};
+
+export const acrnVolChange = ({ frequency, type, volume }) => {
+  if (type === ACRN.type.tone) {
+    // Check if tone exists
+    if (soundCache.hasOwnProperty(frequency)) {
+      const { player } = soundCache[frequency];
+      player.setVolume(volume);
+    }
+  }
+};
