@@ -9,6 +9,7 @@ import {
   writeStringToLocalAsync,
 } from '../localFS';
 import { Sound } from './sound';
+import { seqFiles } from './sequences';
 import { toneFiles } from './tones';
 
 // Redux
@@ -317,41 +318,48 @@ export const toggleAcrnPlay = async ({
 }) => {
   let player;
   let status = acrns[type].status;
+  const key = `${type}-${frequency}`;
 
+  // Check if exists
   if (type === ACRN.type.tone) {
-    // Check if tone exists
-    if (
-      !soundCache.hasOwnProperty(frequency) &&
-      toneFiles.hasOwnProperty(frequency)
-    ) {
+    if (!soundCache.hasOwnProperty(key)) {
       const file = toneFiles[frequency];
       player = new Sound();
       await player.loadLocalFile(file);
-      soundCache[frequency] = { player };
+      soundCache[key] = { player };
     } else {
-      player = soundCache[frequency].player;
+      player = soundCache[key].player;
     }
-
-    if (status === 'stopped') {
-      await player.setLoop(true);
-      await player.setVolume(volume);
-      await player.start();
-      status = 'started';
+  } else {
+    if (!soundCache.hasOwnProperty(key)) {
+      const file = seqFiles[frequency];
+      player = new Sound();
+      await player.loadLocalFile(file);
+      soundCache[key] = { player };
     } else {
-      await player.stop();
-      status = 'stopped';
+      player = soundCache[key].player;
     }
   }
 
-  dispatch(setAcrn({ type: ACRN.type.tone, acrn: { status } }));
+  if (status === 'stopped') {
+    await player.setLoop(true);
+    await player.setVolume(volume);
+    await player.start();
+    status = 'started';
+  } else {
+    await player.stop();
+    status = 'stopped';
+  }
+
+  dispatch(setAcrn({ type, acrn: { status } }));
 };
 
 export const acrnVolChange = ({ frequency, type, volume }) => {
-  if (type === ACRN.type.tone) {
-    // Check if tone exists
-    if (soundCache.hasOwnProperty(frequency)) {
-      const { player } = soundCache[frequency];
-      player.setVolume(volume);
-    }
+  const key = `${type}-${frequency}`;
+
+  // Check if tone exists
+  if (soundCache.hasOwnProperty(key)) {
+    const { player } = soundCache[key];
+    player.setVolume(volume);
   }
 };

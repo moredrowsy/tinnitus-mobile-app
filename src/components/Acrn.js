@@ -75,12 +75,13 @@ const Acrn = ({}) => {
           style={tw`flex-1 justify-center rounded-tl p-2 ${
             type === ACRN.type.tone ? 'bg-gray-400' : ''
           }`}
+          disabled={isDisabledBySequence}
           onPress={() => setType(ACRN.type.tone)}
         >
           <Text
             style={tw`font-bold text-lg text-center ${
               type === ACRN.type.tone ? 'text-gray-100' : 'text-gray-700'
-            }`}
+            } ${isDisabledBySequence ? 'text-gray-300' : ''}`}
           >
             Tone
           </Text>
@@ -89,6 +90,7 @@ const Acrn = ({}) => {
           style={tw`flex-1 justify-center rounded-tr p-2 ${
             type === ACRN.type.sequence ? 'bg-gray-400' : ''
           }`}
+          disabled={isDisabledBySequence}
           onPress={() => setType(ACRN.type.sequence)}
         >
           <Text
