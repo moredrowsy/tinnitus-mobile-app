@@ -69,7 +69,7 @@ const Acrn = ({}) => {
   }
 
   return (
-    <View style={tw`shadow-md mb-2`}>
+    <View style={tw`flex shadow-md rounded mb-2`}>
       <View style={tw`flex-row bg-gray-200`}>
         <Pressable
           style={tw`flex-1 justify-center rounded-tl p-2 ${
