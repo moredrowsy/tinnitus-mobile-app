@@ -198,7 +198,23 @@ export function changeSoundVolume({
   changeSoundVolumeDebounce({ dispatch, soundId, userId, volume });
 }
 
-const stopPlayer = ({ dispatch, id, storageKey }) => {
+export const addPlayer = async ({ storageKey, dataURL, volume }) => {
+  if (soundCache.hasOwnProperty(storageKey)) {
+    soundCache[storageKey].player.stop();
+    delete soundCache[storageKey];
+  }
+
+  try {
+    // Create new player and add to cache
+    const player = new Sound();
+    await player.load(dataURL);
+    soundCache[storageKey] = { player };
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const stopPlayer = ({ dispatch, id, storageKey }) => {
   if (soundCache.hasOwnProperty(storageKey)) {
     const { player } = soundCache[storageKey];
 

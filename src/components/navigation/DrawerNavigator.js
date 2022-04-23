@@ -12,6 +12,7 @@ import {
   Profile,
   SignIn,
   SignUp,
+  Upload,
 } from '../routes';
 
 // React Native Navigation
@@ -71,6 +72,7 @@ const DrawerNavigator = ({ user }) => {
         <Drawer.Screen name='Noise' component={NoiseGenerator} />
         <Drawer.Screen name='Sounds' component={SoundStackNavigator} />
         <Drawer.Screen name='Mixes' component={MixesStackNavigator} />
+        <Drawer.Screen name='Upload' component={Upload} />
         {user ? (
           <>
             <Drawer.Screen key='Profile' name='Profile' component={Profile} />
