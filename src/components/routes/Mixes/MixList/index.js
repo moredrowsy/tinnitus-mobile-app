@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // React Native
-import { View, Text } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import tw from 'twrnc';
 import Mix from '../../../Mix';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { refreshReduxAsync } from '../../../../store/redux/slices/common';
 
 const MixList = ({ navigation, mixes, sounds, userId, usernames }) => {
+  const dispatch = useDispatch();
   const userMixes = useSelector((state) => state.user.mixes);
   const mixesArray = Object.keys(mixes)
     .map((key) => mixes[key])
     .sort((a, b) => b.timestamp - a.timestamp);
 
+  // Refresh control
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    dispatch(refreshReduxAsync());
+  };
+
   return (
-    <View style={tw`mt-2`}>
+    <ScrollView
+      style={tw`m-2`}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       {mixesArray.map((mix) => (
         <Mix
           key={mix.id}
@@ -27,7 +40,7 @@ const MixList = ({ navigation, mixes, sounds, userId, usernames }) => {
           usernames={usernames}
         />
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

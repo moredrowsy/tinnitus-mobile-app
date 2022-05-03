@@ -20,9 +20,9 @@ const AddMix = ({ navigation, sounds, userId }) => {
   const [mixTitle, setMixTitle] = useState('');
   const [mixTags, setMixTags] = useState(new Set());
   const [toSounds, setToSounds] = useState({});
-  const fromSoundsKeys = Object.keys(sounds).filter(
-    (key) => !toSounds.hasOwnProperty(key)
-  );
+  const fromSoundsKeys = Object.keys(sounds)
+    .sort((a, b) => sounds[a].title.localeCompare(sounds[b].title))
+    .filter((key) => !toSounds.hasOwnProperty(key));
 
   // React Native for toggling the arrow button to open/close
   const [isOpen, setIsOpen] = useState(false);
@@ -103,23 +103,23 @@ const AddMix = ({ navigation, sounds, userId }) => {
 
   return (
     <View>
-      <View
-        style={tw`relative bg-gray-700 p-2 w-full flex justify-center items-center`}
-      >
-        <Text style={tw`text-white text-center`}>AddMix</Text>
+      <Pressable onPress={() => setIsOpen(!isOpen)}>
         <View
-          style={[
-            tw`w-10 absolute ${isOpen ? 'bottom-2' : 'top-2'} right-0`,
-            isOpen
-              ? { transform: [{ rotate: '-90deg' }] }
-              : { transform: [{ rotate: '90deg' }] },
-          ]}
+          style={tw`relative bg-gray-700 p-2 w-full flex justify-center items-center`}
         >
-          <Pressable onPress={() => setIsOpen(!isOpen)}>
+          <Text style={tw`text-white text-center`}>Add Mix</Text>
+          <View
+            style={[
+              tw`w-10 absolute ${isOpen ? 'bottom-2' : 'top-2'} right-0`,
+              isOpen
+                ? { transform: [{ rotate: '-90deg' }] }
+                : { transform: [{ rotate: '90deg' }] },
+            ]}
+          >
             <MaterialIcons name='chevron-left' size={30} color='#fff' />
-          </Pressable>
+          </View>
         </View>
-      </View>
+      </Pressable>
       {isOpen && (
         <View>
           <TextInput
