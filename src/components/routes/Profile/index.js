@@ -68,7 +68,7 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView style={tw`mx-1`}>
+    <SafeAreaView style={tw`mx-2`}>
       <FocusAwareStatusBar
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}

@@ -24,7 +24,7 @@ const MixList = ({ navigation, mixes, sounds, userId, usernames }) => {
 
   return (
     <ScrollView
-      style={tw`m-2`}
+      style={tw`my-2`}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
