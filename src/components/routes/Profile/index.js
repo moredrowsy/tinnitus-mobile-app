@@ -68,7 +68,7 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tw`mx-1`}>
       <FocusAwareStatusBar
         barStyle='light-content'
         backgroundColor={NAVBAR.backgroundColor}
@@ -90,10 +90,24 @@ const Profile = () => {
             Profile
           </Text>
         </View>
+        <View style={tw`justify-start w-full`}>
+          <Text
+            style={tw` mt-5 text-left text-sm font-bold text-gray-900 uppercase`}
+          >
+            email address
+          </Text>
+        </View>
         <View
-          style={tw`w-full mt-5 bg-gray-100 border border-gray-300 rounded-tl-md rounded-tr-md`}
+          style={tw`w-full bg-gray-100 border border-gray-300 rounded-tl-md rounded-tr-md`}
         >
           <Text style={tw`px-3 py-3`}>{user.email}</Text>
+        </View>
+        <View style={tw`justify-start w-full`}>
+          <Text
+            style={tw` mt-5 text-left text-sm font-bold text-gray-900 uppercase`}
+          >
+            display name
+          </Text>
         </View>
         <View
           style={tw`w-full bg-white border-l border-r border-b border-gray-300 rounded-bl-md rounded-br-md`}
