@@ -2,6 +2,8 @@
 
 A cross platform mobile app for the tinnitus sound therapy built using React Native.
 
+The web app can be found here: <https://github.com/moredrowsy/tinnitus-web-app/>
+
 ## Install
 
 ```bash
